@@ -1,0 +1,39 @@
+{
+    "generated_at": "2026-03-04T22:46:00.755762",
+    "items": {
+        "decisions": [],
+        "rules": [
+            {
+                "rule": "New CLI command",
+                "scope": "src/car_fleet/cli.py",
+                "source_file": "AGENTS.md",
+                "observed_at": "2026-02-20T11:17:20"
+            },
+            {
+                "rule": "New domain type",
+                "scope": "src/car_fleet/models.py",
+                "source_file": "AGENTS.md",
+                "observed_at": "2026-02-20T11:17:20"
+            },
+            {
+                "rule": "New DB table or query",
+                "scope": "src/car_fleet/storage.py",
+                "source_file": "AGENTS.md",
+                "observed_at": "2026-02-20T11:17:20"
+            },
+            {
+                "rule": "Project/config",
+                "scope": "pyproject.toml, README.md",
+                "source_file": "AGENTS.md",
+                "observed_at": "2026-02-20T11:17:20"
+            },
+            {
+                "rule": "Conventions for AI",
+                "scope": ".cursor/rules/*.mdc",
+                "source_file": "AGENTS.md",
+                "observed_at": "2026-02-20T11:17:20"
+            }
+        ],
+        "warnings": []
+    }
+}
