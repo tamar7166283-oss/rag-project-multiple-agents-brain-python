@@ -11,11 +11,10 @@ from llama_index.core.postprocessor import SimilarityPostprocessor
 # ייבוא מה-Config
 from config import embed_model, llm, PINECONE_API_KEY, PINECONE_INDEX_NAME
 
-# --- תיקוני רשת לנטפרי ---
+
 os.environ['CURL_CA_BUNDLE'] = '' 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-# הגדרת מודלים גלובלית
 Settings.llm = llm
 Settings.embed_model = embed_model
 
@@ -26,32 +25,27 @@ def setup_rag():
     
     vector_store = PineconeVectorStore(pinecone_index=pinecone_index)
     
-    # טעינת האינדקס מה-Vector Store
     index = VectorStoreIndex.from_vector_store(
         vector_store, 
         embed_model=embed_model
     )
 
-    # --- כאן הייתה הבעיה! הגדרת ה-Retriever ---
     retriever = VectorIndexRetriever(
         index=index, 
         similarity_top_k=5
     )
     
-    # הגדרת המנסח (Synthesizer)
     response_synthesizer = get_response_synthesizer(
         llm=llm, 
         response_mode="compact"
     )
 
-    # בניית מנוע השאילתות - שימי לב שכל המשתנים מוגדרים עכשיו
     return RetrieverQueryEngine(
         retriever=retriever,
         response_synthesizer=response_synthesizer,
         node_postprocessors=[SimilarityPostprocessor(similarity_cutoff=0.1)] # השארתי נמוך לבדיקה
     )
 
-# אתחול המנוע
 try:
     engine = setup_rag()
     print("✅ RAG Engine is ready!")
@@ -70,5 +64,4 @@ def chat(message, history):
     except Exception as e:
         return f"קרתה שגיאה: {e}"
 
-# הפעלה
 gr.ChatInterface(fn=chat, title="Agentic RAG Explorer").launch()

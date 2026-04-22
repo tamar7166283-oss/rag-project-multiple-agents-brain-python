@@ -1,37 +1,67 @@
 {
-    "generated_at": "2026-03-04T22:46:00.755762",
+    "generated_at": "2026-04-22T10:28:37.798873",
     "items": {
         "decisions": [],
         "rules": [
             {
-                "rule": "New CLI command",
-                "scope": "src/car_fleet/cli.py",
+                "rule": "MaintenanceRecord.recurrence_interval_days stores the recurrence pattern (e.g., 90 for quarterly)",
+                "scope": "Recurring Maintenance",
                 "source_file": "AGENTS.md",
                 "observed_at": "2026-02-20T11:17:20"
             },
             {
-                "rule": "New domain type",
-                "scope": "src/car_fleet/models.py",
+                "rule": "When completing a recurring task via complete_maintenance():\n  1. Mark current record as completed\n  2. Auto-create next occurrence with scheduled_date + interval\n  3. New record gets same description, notes, and recurrence interval",
+                "scope": "Recurring Maintenance",
                 "source_file": "AGENTS.md",
                 "observed_at": "2026-02-20T11:17:20"
             },
             {
-                "rule": "New DB table or query",
-                "scope": "src/car_fleet/storage.py",
+                "rule": "Each occurrence is a separate DB record with a unique ID",
+                "scope": "Recurring Maintenance",
                 "source_file": "AGENTS.md",
                 "observed_at": "2026-02-20T11:17:20"
             },
             {
-                "rule": "Project/config",
-                "scope": "pyproject.toml, README.md",
-                "source_file": "AGENTS.md",
-                "observed_at": "2026-02-20T11:17:20"
+                "rule": "python -m venv .venv",
+                "scope": "Create a virtual environment",
+                "source_file": "README.md",
+                "observed_at": "2026-02-20T11:16:54"
             },
             {
-                "rule": "Conventions for AI",
-                "scope": ".cursor/rules/*.mdc",
-                "source_file": "AGENTS.md",
-                "observed_at": "2026-02-20T11:17:20"
+                "rule": ".venv\\Scripts\\activate",
+                "scope": "Activate virtual environment on Windows",
+                "source_file": "README.md",
+                "observed_at": "2026-02-20T11:16:54"
+            },
+            {
+                "rule": "source .venv/bin/activate",
+                "scope": "Activate virtual environment on macOS/Linux",
+                "source_file": "README.md",
+                "observed_at": "2026-02-20T11:16:54"
+            },
+            {
+                "rule": "pip install -e .",
+                "scope": "Install project in editable mode",
+                "source_file": "README.md",
+                "observed_at": "2026-02-20T11:16:54"
+            },
+            {
+                "rule": "pip install -e \".[dev]\"",
+                "scope": "Install development dependencies",
+                "source_file": "README.md",
+                "observed_at": "2026-02-20T11:16:54"
+            },
+            {
+                "rule": "ruff check src tests",
+                "scope": "Run linter",
+                "source_file": "README.md",
+                "observed_at": "2026-02-20T11:16:54"
+            },
+            {
+                "rule": "pytest",
+                "scope": "Run tests",
+                "source_file": "README.md",
+                "observed_at": "2026-02-20T11:16:54"
             }
         ],
         "warnings": []

@@ -13,16 +13,13 @@ from llama_index.core import VectorStoreIndex
 from pinecone import Pinecone
 from llama_index.core.llms import ChatMessage
 
-# ייבוא מה-Config
 from config import embed_model, llm, PINECONE_API_KEY, PINECONE_INDEX_NAME
 
-# הגדרות רשת וביצועים
 os.environ['CURL_CA_BUNDLE'] = ''
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 Settings.llm = llm
 Settings.embed_model = embed_model
 
-# --- אירועים (Events) ---
 class SemanticSearchEvent(Event):
     query: str
 
@@ -39,7 +36,6 @@ class QueryReformulationEvent(Event):
     original_query: str
     reason: str
 
-# --- הגדרת ה-Workflow ---
 class RAGWorkflow(Workflow):
     
     @step
@@ -68,7 +64,6 @@ class RAGWorkflow(Workflow):
         print(f"🔄 Original: {query} -> Rewritten: {final_query}")
         await ctx.store.set("user_query", final_query)
         
-        # 2. ניתוב (Routing)
         router_msg = ChatMessage(role="user", content=f"""
             Analyze: "{final_query}"
             If it asks for a LIST, ALL items, RULES, or DECISIONS, return 'STRUCTURED'.
@@ -125,7 +120,6 @@ class RAGWorkflow(Workflow):
     async def synthesize(self, ctx: Context, ev: ValidationEvent) -> StopEvent:
         query = await ctx.store.get("user_query")
         
-        # פרומפט אנגלי שמאפשר הסקה לוגית מההקשר (Inference)
         qa_template = PromptTemplate(
             "Context: {context_str}\n"
             "Question: {query_str}\n"
@@ -133,14 +127,11 @@ class RAGWorkflow(Workflow):
             "If unrelated, say you don't know.\nAnswer:"
         )
 
-        # שימוש ב-tree_summarize לסיכום חכם של כל המידע שנמצא
         synthesizer = get_response_synthesizer(llm=llm, response_mode="tree_summarize", text_qa_template=qa_template)
         response = synthesizer.synthesize(query=query, nodes=ev.relevant_nodes)
         return StopEvent(result=str(response))
 
-# --- ממשק Gradio עם זיכרון ---
 async def chat(message, history):
-    # שליחת 3 הודעות אחרונות לזיכרון
     formatted_history = "\n".join([f"User: {h[0]}\nBot: {h[1]}" for h in history[-3:]])
     wf = RAGWorkflow(timeout=60)
     result = await wf.run(query=message, chat_history=formatted_history)
